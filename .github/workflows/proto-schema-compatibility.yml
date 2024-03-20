@@ -89,7 +89,7 @@ jobs:
       id: get-access-token
       if: steps.changed-files-specific.outputs.any_changed == 'true'
       run: |
-        OUTPUT=`curl --http1.1  --request GET --url 'https://api.schematalabs.com/user/v1/auth/github-token' --header 'content-Type: application/json'`
+        OUTPUT=`curl --http1.1  --request GET --url 'https://api.aldefi.io/user/v1/auth/github-token' --header 'content-Type: application/json'`
         TOKEN=`echo ${OUTPUT} | jq -r .entity.token.accessToken`
         echo ${TOKEN}
         STATUS=`echo ${OUTPUT} | jq -r .status`
@@ -101,7 +101,7 @@ jobs:
       if: steps.changed-files-specific.outputs.any_changed == 'true'
       run: |
         echo ${{ steps.backwark_compatibility_check.outputs.RESULT }}
-        OUTPUT=`curl --http1.1  --request PUT --url 'https://api.schematalabs.com/connect/v1/github/validate-schema' --header 'authorization: Bearer ${{ steps.get-access-token.outputs.TOKEN }}' --header 'content-Type: application/json' --data-raw '{ "prName": "${{ github.event.pull_request.title }}", "prNumber":  "${{github.event.pull_request.number}}", "repoName": "${{ github.event.pull_request.base.repo.full_name }}" , "sourceBranch": "${{ github.event.pull_request.head.ref }}", "targetBranch": "${{ github.event.pull_request.base.ref }}", "status": "${{github.event.pull_request.state}}", "raisedBy": "${{github.event.pull_request.user.login}}", "filesChanged": "${{ steps.changed-files-specific.outputs.all_changed_files }}", "schemaValidationMessage": ${{ steps.backwark_compatibility_check.outputs.RESULT }}}'`
+        OUTPUT=`curl --http1.1  --request PUT --url 'https://api.aldefi.io/connect/v1/github/validate-schema' --header 'authorization: Bearer ${{ steps.get-access-token.outputs.TOKEN }}' --header 'content-Type: application/json' --data-raw '{ "prName": "${{ github.event.pull_request.title }}", "prNumber":  "${{github.event.pull_request.number}}", "repoName": "${{ github.event.pull_request.base.repo.full_name }}" , "sourceBranch": "${{ github.event.pull_request.head.ref }}", "targetBranch": "${{ github.event.pull_request.base.ref }}", "status": "${{github.event.pull_request.state}}", "raisedBy": "${{github.event.pull_request.user.login}}", "filesChanged": "${{ steps.changed-files-specific.outputs.all_changed_files }}", "schemaValidationMessage": ${{ steps.backwark_compatibility_check.outputs.RESULT }}}'`
         STATUS=`echo ${OUTPUT} | jq -r .status`
         ERRMSG=`echo ${OUTPUT} | jq -r .message`
         VALIDATION_STATUS=`echo ${OUTPUT} | jq -r .entity.status`
@@ -125,7 +125,7 @@ jobs:
       id: compute-score
       if: steps.changed-files-specific.outputs.any_changed == 'true'
       run: |
-        CODE=`curl --http1.1  --request PUT --url 'https://api.schematalabs.com/connect/v1/github/compute-score' --header 'authorization: Bearer ${{ steps.get-access-token.outputs.TOKEN }}' --header 'content-Type: application/json' --data-raw '{ "prName": "${{ github.event.pull_request.title }}", "prNumber":  "${{github.event.pull_request.number}}", "repoName": "${{ github.event.pull_request.base.repo.full_name }}" , "sourceBranch": "${{ github.event.pull_request.head.ref }}", "targetBranch": "${{ github.event.pull_request.base.ref }}", "sha": "${{ github.event.pull_request.head.sha }}", "status": "${{github.event.pull_request.state}}", "raisedBy": "${{github.event.pull_request.user.login}}", "filesChanged": "${{ steps.changed-files-specific.outputs.all_changed_files }}"}'`
+        CODE=`curl --http1.1  --request PUT --url 'https://api.aldefi.io/connect/v1/github/compute-score' --header 'authorization: Bearer ${{ steps.get-access-token.outputs.TOKEN }}' --header 'content-Type: application/json' --data-raw '{ "prName": "${{ github.event.pull_request.title }}", "prNumber":  "${{github.event.pull_request.number}}", "repoName": "${{ github.event.pull_request.base.repo.full_name }}" , "sourceBranch": "${{ github.event.pull_request.head.ref }}", "targetBranch": "${{ github.event.pull_request.base.ref }}", "sha": "${{ github.event.pull_request.head.sha }}", "status": "${{github.event.pull_request.state}}", "raisedBy": "${{github.event.pull_request.user.login}}", "filesChanged": "${{ steps.changed-files-specific.outputs.all_changed_files }}"}'`
         echo ${CODE}
         STATUS=`echo ${CODE} | jq -r .status`
         ERRMSG=`echo ${CODE} | jq -r .message`
@@ -184,7 +184,7 @@ jobs:
         id: get-access-token
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
-          OUTPUT=`curl --http1.1  --request GET --url 'https://api.schematalabs.com/user/v1/auth/github-token' --header 'content-Type: application/json'`
+          OUTPUT=`curl --http1.1  --request GET --url 'https://api.aldefi.io/user/v1/auth/github-token' --header 'content-Type: application/json'`
           TOKEN=`echo ${OUTPUT} | jq -r .entity.token.accessToken`
           echo ${TOKEN}
           STATUS=`echo ${OUTPUT} | jq -r .status`
@@ -195,7 +195,7 @@ jobs:
         id: compute-score
         if: steps.changed-files-specific.outputs.any_changed == 'true' && steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
-          CODE=`curl --http1.1  --request PUT --url 'https://api.schematalabs.com/connect/v1/github/compute-score' --header 'authorization: Bearer ${{ steps.get-access-token.outputs.TOKEN }}' --header 'content-Type: application/json' --data-raw '{ "prName": "${{ github.event.pull_request.title }}", "prNumber":  "${{github.event.pull_request.number}}", "repoName": "${{ github.event.pull_request.base.repo.full_name }}" , "sourceBranch": "${{ github.event.pull_request.head.ref }}", "targetBranch": "${{ github.event.pull_request.base.ref }}", "sha": "${{ github.event.pull_request.head.sha }}", "status": "merged", "raisedBy": "${{github.event.pull_request.user.login}}", "filesChanged": "${{ steps.changed-files-specific.outputs.all_changed_files }}"}'`
+          CODE=`curl --http1.1  --request PUT --url 'https://api.aldefi.io/connect/v1/github/compute-score' --header 'authorization: Bearer ${{ steps.get-access-token.outputs.TOKEN }}' --header 'content-Type: application/json' --data-raw '{ "prName": "${{ github.event.pull_request.title }}", "prNumber":  "${{github.event.pull_request.number}}", "repoName": "${{ github.event.pull_request.base.repo.full_name }}" , "sourceBranch": "${{ github.event.pull_request.head.ref }}", "targetBranch": "${{ github.event.pull_request.base.ref }}", "sha": "${{ github.event.pull_request.head.sha }}", "status": "merged", "raisedBy": "${{github.event.pull_request.user.login}}", "filesChanged": "${{ steps.changed-files-specific.outputs.all_changed_files }}"}'`
           echo ${CODE}
           STATUS=`echo ${CODE} | jq -r .status`
           ERRMSG=`echo ${CODE} | jq -r .message`
