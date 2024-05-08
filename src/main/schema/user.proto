@@ -11,13 +11,13 @@ enum UserActivityType {
   VIEW_DESCRIPTION = 2;
 }
 
-
 message User {
   option(org.schemata.schema.message_core).description = "This is the description of the users table";
   option(org.schemata.schema.owner) = "Platform";
   option(org.schemata.schema.domain) = "Core";
-  option(org.schemata.schema.schema_type) = ENTITY;
+  option(org.schemata.schema.schema_type) = UNKNOWN;
   option(org.schemata.schema.status) = "Active";
+  option(org.schemata.schema.quality_rule_base) = "(name != 'null')";
   option(org.schemata.schema.subscribers) = {
     name: "Customer Support Team"
   };
@@ -44,6 +44,46 @@ message User {
 
   string age = 6
   [(org.schemata.schema.field_core).description = "Age of the user",
+   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
+
+  string region = 7
+  [(org.schemata.schema.field_core).description = "The location of the user",
+   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
+
+}
+
+message UserActivityAggregate {
+  option(org.schemata.schema.message_core).description = "This is the aggregated user activity view count. The event aggregated by user & product";
+  option(org.schemata.schema.owner) = "Product";
+  option(org.schemata.schema.domain) = "Growth";
+  option(org.schemata.schema.schema_type) = EVENT;
+  option(org.schemata.schema.status) = "Active";
+  option(org.schemata.schema.subscribers) = {
+    name: "Customer Support Team"
+  };
+
+  User user = 1
+  [(org.schemata.schema.field_core).description = "User entity reference",
+   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
+
+  Product product = 2
+  [(org.schemata.schema.field_core).description = "Product entity reference",
+   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
+
+  int64 count = 3
+  [(org.schemata.schema.field_core).description = "Aggregated count of the user activity per product",
+   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
+
+  int32 windowTime = 4
+  [(org.schemata.schema.field_core).description = "Max window time for the aggregation",
+   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
+
+  org.schemata.schema.TimeUnit window_time_unit = 5
+  [(org.schemata.schema.field_core).description = "TimeUnit of window for the aggregation",
+   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
+
+  google.protobuf.Timestamp timestamp = 6
+  [(org.schemata.schema.field_core).description = "Timestamp of the activity",
    (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
 
 }
@@ -104,38 +144,3 @@ message UserActivityEvent {
 
 }
 
-message UserActivityAggregate {
-  option(org.schemata.schema.message_core).description = "This is the aggregated user activity view count. The event aggregated by user & product";
-  option(org.schemata.schema.owner) = "Product";
-  option(org.schemata.schema.domain) = "Growth";
-  option(org.schemata.schema.schema_type) = EVENT;
-  option(org.schemata.schema.status) = "Active";
-  option(org.schemata.schema.subscribers) = {
-    name: "Customer Support Team"
-  };
-
-  User user = 1
-  [(org.schemata.schema.field_core).description = "User entity reference",
-   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
-
-  Product product = 2
-  [(org.schemata.schema.field_core).description = "Product entity reference",
-   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
-
-  int64 count = 3
-  [(org.schemata.schema.field_core).description = "Aggregated count of the user activity per product",
-   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
-
-  int32 windowTime = 4
-  [(org.schemata.schema.field_core).description = "Max window time for the aggregation",
-   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
-
-  org.schemata.schema.TimeUnit window_time_unit = 5
-  [(org.schemata.schema.field_core).description = "TimeUnit of window for the aggregation",
-   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
-
-  google.protobuf.Timestamp timestamp = 6
-  [(org.schemata.schema.field_core).description = "Timestamp of the activity",
-   (org.schemata.schema.is_pii) = false,(org.schemata.schema.is_classified) = false,(org.schemata.schema.depricated) = false];
-
-}
