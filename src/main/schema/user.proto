@@ -19,7 +19,8 @@ message User {
   option(org.schemata.schema.status) = "Active";
   option(org.schemata.schema.quality_rule_base) = "(1 = 1)";
   option(org.schemata.schema.subscribers) = {
-    name: "Customer Support Team"
+    name: "Customer Support Team",
+    name: "Sales Team"
   };
 
   int32 id = 1
